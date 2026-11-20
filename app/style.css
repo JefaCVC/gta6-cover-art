@@ -187,8 +187,10 @@ label { display: block; font-size: 13px; color: var(--muted); }
 label + label, .row + label, label + .row, .sliders + label { margin-top: 12px; }
 
 .row { display: flex; gap: 8px; flex-wrap: wrap; }
-.row.two-col > label { flex: 1 1 0; margin-top: 0; }
-.row.two-col { margin-top: 12px; }
+/* Stacked, not side by side: a half-width Seal text field clipped
+   ORIGINAL COVER ART to ORIGINAL COV. Full-width fields show both values whole. */
+.row.two-col { flex-direction: column; margin-top: 12px; }
+.row.two-col > label { margin-top: 0; }
 
 .hint-line { color: var(--faint); font-size: 12px; margin: 8px 0 0; }
 
@@ -255,7 +257,18 @@ label + label, .row + label, label + .row, .sliders + label { margin-top: 12px; 
   padding: 0;
   background: #160826;
 }
-.photo-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.photo-thumb img {
+  /* Absolute fill: an <img> in flow inside a <button> does not resolve its
+     percentage size against the button (it rendered 12x16), leaving the chip
+     an empty frame with just the name initial. Pinned to the button's box,
+     the thumbnail covers the whole chip. */
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
 .photo-thumb .thumb-name {
   position: absolute;
   left: 0;
@@ -407,9 +420,12 @@ label + label, .row + label, label + .row, .sliders + label { margin-top: 12px; 
 .sliders label input { min-width: 0; }
 .sliders label span { text-align: right; color: var(--text); font-size: 12px; }
 
+/* One column, not two: the values are long (NO WITNESSES, MARINA DEL SOL,
+   THE NIGHT MANAGER) and a half-width field clipped them mid-word. Full-width
+   fields show every value whole. */
 .tag-fields {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: 12px;
   margin-top: 12px;
 }
@@ -472,12 +488,23 @@ body.shot-cover #preview {
   box-shadow: none;
 }
 
-/* Editor screenshot mode: tighter rails so more of the studio fits the frame. */
+/* Editor screenshot mode: tighter rails so more of the studio fits the frame.
+   All spacing stays on the 4px scale. The name strip under each photo chip is
+   hidden here: at six chips across it reads as a lone initial, and the photo
+   itself is what the shot must show. */
 
-body.shot-editor .rail { padding: 12px; gap: 12px; }
+body.shot-editor .rail { padding: 8px; gap: 8px; }
 body.shot-editor .panel { padding: 12px; }
 body.shot-editor .panel h2 { margin-bottom: 8px; }
+body.shot-editor label + label, body.shot-editor .row + label,
+body.shot-editor label + .row, body.shot-editor .sliders + label { margin-top: 8px; }
+body.shot-editor input[type="text"], body.shot-editor select { padding: 6px 8px; }
+body.shot-editor .sliders { gap: 8px; margin-top: 8px; }
+body.shot-editor .tag-fields { gap: 8px; margin-top: 8px; }
+body.shot-editor .kit-grid { margin-bottom: 8px; }
 body.shot-editor .photo-grid { grid-template-columns: repeat(6, 1fr); gap: 6px; margin: 8px 0; }
+body.shot-editor .photo-thumb .thumb-name { display: none; }
+body.shot-editor .photo-thumb .thumb-x { display: none; }
 body.shot-editor .layout-grid { grid-template-columns: repeat(3, 1fr); }
 body.shot-editor .layout-btn svg { height: 36px; }
 body.shot-editor .grade-btn .swatch { height: 22px; }
