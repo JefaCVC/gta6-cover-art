@@ -57,7 +57,7 @@ body {
 ::-webkit-scrollbar-thumb { background: var(--line2); border-radius: 8px; border: 2px solid var(--bg); }
 ::-webkit-scrollbar-track { background: transparent; }
 
-button, input, select { font: inherit; color: inherit; }
+button, input, select, textarea { font: inherit; color: inherit; }
 button { cursor: pointer; }
 button:focus-visible, input:focus-visible, select:focus-visible {
   outline: 2px solid var(--accent2);
@@ -137,7 +137,7 @@ button.accent:hover { filter: brightness(1.08); }
 button.on { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) inset; }
 button.wide { width: 100%; margin-top: 8px; }
 
-input[type="text"], select {
+input[type="text"], select, textarea {
   width: 100%;
   background: #160826;
   border: 1px solid var(--line2);
@@ -145,7 +145,11 @@ input[type="text"], select {
   padding: 8px 10px;
   margin-top: 4px;
 }
-input[type="text"]:focus, select:focus { border-color: var(--accent2); outline: none; }
+input[type="text"]:focus, select:focus, textarea:focus { border-color: var(--accent2); outline: none; }
+
+/* The tagline wraps to two lines so its full value shows; the field is fixed
+   height (rows=2) and not user-resizable, so it can never push the rail. */
+textarea { resize: none; }
 
 input[type="range"] {
   -webkit-appearance: none;
@@ -498,7 +502,7 @@ body.shot-editor .panel { padding: 12px; }
 body.shot-editor .panel h2 { margin-bottom: 8px; }
 body.shot-editor label + label, body.shot-editor .row + label,
 body.shot-editor label + .row, body.shot-editor .sliders + label { margin-top: 8px; }
-body.shot-editor input[type="text"], body.shot-editor select { padding: 6px 8px; }
+body.shot-editor input[type="text"], body.shot-editor select, body.shot-editor textarea { padding: 6px 8px; }
 body.shot-editor .sliders { gap: 8px; margin-top: 8px; }
 body.shot-editor .tag-fields { gap: 8px; margin-top: 8px; }
 body.shot-editor .kit-grid { margin-bottom: 8px; }
