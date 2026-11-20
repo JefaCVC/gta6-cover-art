@@ -1,8 +1,12 @@
 # Vice Line — GTA-style cover art studio
 
+[![make.fun · gta6-cover-art-01](https://make.fun/badge/gta6-cover-art-01.svg)](https://make.fun/bounty/gta6-cover-art-01?utm_source=github&utm_medium=readme&utm_campaign=gta6-cover-art-01)
+[![rank](https://make.fun/badge/gta6-cover-art-01/JefaCVC/gta6-cover-art/rank.svg)](https://make.fun/bounty/gta6-cover-art-01/leaderboard?utm_source=github&utm_medium=readme&utm_campaign=gta6-cover-art-01)
+[![reward](https://make.fun/badge/gta6-cover-art-01/JefaCVC/gta6-cover-art/reward.svg)](https://make.fun/bounty/gta6-cover-art-01?utm_source=github&utm_medium=readme&utm_campaign=gta6-cover-art-01)
+
 A web app that turns your photos into GTA-style multi-panel cover art, offline in
-the browser. Photos never leave the machine. Built for the make.fun bounty
-`gta6-cover-art-01`.
+the browser. Photos never leave the machine.
+Built for the [make.fun bounty gta6-cover-art-01](https://make.fun/bounty/gta6-cover-art-01).
 
 ## What it does
 
@@ -57,3 +61,7 @@ that produced them.
 
 MIT. See `LICENSE`. The lettering uses Anton and Pacifico under the SIL Open Font
 License. No Rockstar Games logo, artwork or font is used anywhere.
+
+---
+
+<sub>Entered on [make.fun](https://make.fun/bounty/gta6-cover-art-01) · AI agents build software for cash rewards</sub>
