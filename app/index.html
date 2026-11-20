@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vice Line · GTA-style cover art studio</title>
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark">VICE LINE</span>
+    <span class="brand-sub">poster cover studio</span>
+  </div>
+  <ol class="steps" aria-label="Three steps">
+    <li><span class="step-num">1</span> Add photos</li>
+    <li><span class="step-num">2</span> Caption</li>
+    <li><span class="step-num">3</span> Export PNG</li>
+  </ol>
+  <div class="top-actions">
+    <button id="undoBtn" type="button" title="Undo (Ctrl+Z)">Undo</button>
+    <button id="redoBtn" type="button" title="Redo (Ctrl+Y)">Redo</button>
+    <button id="surpriseBtn" type="button" class="accent" title="Random layout, grade and caption (S)">Surprise me</button>
+  </div>
+</header>
+
+<main class="studio">
+  <aside class="rail left" aria-label="Photos, layout and grade">
+    <section class="panel">
+      <h2><span class="step-num">1</span> Photos</h2>
+      <div class="row">
+        <button id="addPhotosBtn" type="button" class="accent">Add photos</button>
+        <button id="loadSamplesBtn" type="button">Samples</button>
+        <input id="photoInput" type="file" accept="image/*" multiple hidden>
+      </div>
+      <div id="photoGrid" class="photo-grid" aria-label="Loaded photos"></div>
+      <p class="hint-line">Drop photos anywhere, or paste with Ctrl+V. Photos stay on your computer.</p>
+      <div class="row">
+        <button id="autoFillBtn" type="button">Auto-fill panels</button>
+        <button id="onePhotoBtn" type="button">One photo fills all</button>
+      </div>
+      <div class="row">
+        <button id="shuffleBtn" type="button">Shuffle photos</button>
+        <button id="artBtn" type="button">Fill gaps with art</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Layout</h2>
+      <div id="layoutGrid" class="layout-grid" role="radiogroup" aria-label="Panel layout"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Colour grade</h2>
+      <div id="gradeGrid" class="grade-grid" role="radiogroup" aria-label="Colour grade"></div>
+    </section>
+
+    <section class="panel">
+      <h2><span class="step-num">2</span> Caption</h2>
+      <label>Title
+        <input id="titleInput" type="text" maxlength="28" value="GOLDEN TIDE" autocomplete="off">
+      </label>
+      <label>Script subtitle
+        <input id="scriptInput" type="text" maxlength="32" value="salt air and neon" autocomplete="off">
+      </label>
+      <label>Tagline
+        <input id="taglineInput" type="text" maxlength="48" value="ONE SUMMER · SIX STORIES · NO REGRETS" autocomplete="off">
+      </label>
+      <div class="row title-styles" role="radiogroup" aria-label="Title style">
+        <button type="button" data-style="chrome" class="on">Chrome striped</button>
+        <button type="button" data-style="solid">Solid block</button>
+        <button type="button" data-style="neon">Neon tube</button>
+      </div>
+    </section>
+  </aside>
+
+  <section class="stage" aria-label="Live preview">
+    <div class="size-tabs" role="tablist" aria-label="Poster size">
+      <button type="button" data-size="1x1" role="tab">1:1 · 1080 × 1080</button>
+      <button type="button" data-size="4x5" role="tab">4:5 · 1080 × 1350</button>
+      <button type="button" data-size="16x9" role="tab" class="on">16:9 · 1920 × 1080</button>
+      <button type="button" data-size="9x16" role="tab">9:16 · 1080 × 1920 Story</button>
+    </div>
+    <div class="canvas-wrap">
+      <canvas id="preview" aria-label="Live poster preview"></canvas>
+      <span id="zoomBadge" class="zoom-badge">1.0×</span>
+    </div>
+    <p class="hint-line stage-hint">Click a panel to select it. Drag inside a panel to pan, scroll to zoom, drag the title to move it. Drag a photo onto a panel to place it there.</p>
+    <div class="panel-bar">
+      <button id="panelPrev" type="button" aria-label="Previous panel">Prev</button>
+      <span id="panelLabel">Panel 1 of 6</span>
+      <button id="panelNext" type="button" aria-label="Next panel">Next</button>
+      <label class="zoom-label">Zoom
+        <input id="panelZoom" type="range" min="1" max="3" step="0.01" value="1">
+        <span id="panelZoomVal">1.00×</span>
+      </label>
+      <span class="preset-label">Crop</span>
+      <div class="row presets" role="group" aria-label="Crop presets">
+        <button type="button" data-preset="face">Face</button>
+        <button type="button" data-preset="closeup">Close-up</button>
+        <button type="button" data-preset="wide">Wide</button>
+        <button type="button" data-preset="scenery">Scenery</button>
+      </div>
+    </div>
+  </section>
+
+  <aside class="rail right" aria-label="Panel, poster kit and export">
+    <section class="panel">
+      <h2>Selected panel</h2>
+      <div class="row">
+        <button id="flipBtn" type="button">Flip</button>
+        <button id="swapBtn" type="button">Swap next</button>
+        <button id="resetCropBtn" type="button">Reset crop</button>
+      </div>
+      <label>Photo
+        <select id="replaceSel"></select>
+      </label>
+      <label>Panel grade
+        <select id="panelGradeSel">
+          <option value="">Same as poster</option>
+        </select>
+      </label>
+      <div class="sliders">
+        <label>Pan X <input id="panXInput" type="range" min="-0.4" max="0.4" step="0.01" value="0"><span id="panXVal">0.00</span></label>
+        <label>Pan Y <input id="panYInput" type="range" min="-0.4" max="0.4" step="0.01" value="0"><span id="panYVal">0.00</span></label>
+        <label>Rotate <input id="rotateInput" type="range" min="-15" max="15" step="1" value="0"><span id="rotateVal">0°</span></label>
+      </div>
+      <label>Panel tag
+        <select id="panelTagMode">
+          <option value="role">Role tag (THE X)</option>
+          <option value="place">Place + time tag</option>
+          <option value="none">No tag</option>
+        </select>
+      </label>
+      <div class="tag-fields">
+        <label>Role <input id="roleInput" type="text" maxlength="18" value="THE CREW" autocomplete="off"></label>
+        <label>Place <input id="placeInput" type="text" maxlength="20" value="OCEAN DRIVE" autocomplete="off"></label>
+        <label>Time <input id="timeInput" type="text" maxlength="10" value="6:42 PM" autocomplete="off"></label>
+        <label>Flavour line <input id="flavorInput" type="text" maxlength="24" value="LOOKING FOR TROUBLE" autocomplete="off"></label>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Poster kit</h2>
+      <div class="kit-grid">
+        <label><input id="kitQuote" type="checkbox" checked> Press quote</label>
+        <label><input id="kitTags" type="checkbox" checked> Panel tags</label>
+        <label><input id="kitSeal" type="checkbox" checked> Seal</label>
+        <label><input id="kitVolume" type="checkbox" checked> Volume tag</label>
+        <label><input id="kitWanted" type="checkbox" checked> WANTED</label>
+        <label><input id="kitTagline" type="checkbox" checked> Tagline ribbon</label>
+        <label><input id="kitBilling" type="checkbox" checked> Billing block</label>
+        <label><input id="kitBarcode" type="checkbox" checked> Barcode</label>
+        <label><input id="kitComingSoon" type="checkbox" checked> Coming soon</label>
+      </div>
+      <label>Press quote
+        <input id="quoteInput" type="text" maxlength="48" value="PURE GOLDEN-HOUR MAYHEM" autocomplete="off">
+      </label>
+      <label>Outlet
+        <input id="outletInput" type="text" maxlength="28" value="THE HARBOR GAZETTE" autocomplete="off">
+      </label>
+      <div class="row two-col">
+        <label>Volume <input id="volumeInput" type="text" maxlength="10" value="VOL. 1" autocomplete="off"></label>
+        <label>Seal text <input id="badgeInput" type="text" maxlength="20" value="ORIGINAL COVER ART" autocomplete="off"></label>
+      </div>
+      <label>Studio name
+        <input id="studioInput" type="text" maxlength="24" value="SUNSET PICTURES" autocomplete="off">
+      </label>
+    </section>
+
+    <section class="panel">
+      <h2>Look</h2>
+      <div class="sliders">
+        <label>Grade strength <input id="slGrade" type="range" min="0" max="100" value="80"><span id="slGradeVal">80</span></label>
+        <label>Grain <input id="slGrain" type="range" min="0" max="100" value="22"><span id="slGrainVal">22</span></label>
+        <label>Halftone <input id="slHalftone" type="range" min="0" max="100" value="20"><span id="slHalftoneVal">20</span></label>
+        <label>Glow <input id="slGlow" type="range" min="0" max="100" value="26"><span id="slGlowVal">26</span></label>
+        <label>Vignette <input id="slVignette" type="range" min="0" max="100" value="35"><span id="slVignetteVal">35</span></label>
+        <label>Ink <input id="slInk" type="range" min="0" max="100" value="30"><span id="slInkVal">30</span></label>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2><span class="step-num">3</span> Export PNG</h2>
+      <div class="export-grid">
+        <button type="button" data-export="1x1">1080 × 1080 <small>Square post · 1:1</small></button>
+        <button type="button" data-export="4x5">1080 × 1350 <small>Portrait post · 4:5</small></button>
+        <button type="button" data-export="16x9">1920 × 1080 <small>Wide banner · 16:9</small></button>
+        <button type="button" data-export="9x16">1080 × 1920 <small>Story · 9:16</small></button>
+      </div>
+      <button id="exportAllBtn" type="button" class="accent wide">Export all four</button>
+      <p id="exportStatus" class="hint-line" role="status"></p>
+    </section>
+  </aside>
+</main>
+
+<div id="dropOverlay" hidden>Drop photos to add them</div>
+<script type="module" src="./src/main.js"></script>
+</body>
+</html>
